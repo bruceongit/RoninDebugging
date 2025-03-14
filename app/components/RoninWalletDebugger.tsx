@@ -21,7 +21,7 @@ export default function RoninWalletDebugger() {
   const [connector, setConnector] = useState<any>(null);
   const [connectedAddress, setConnectedAddress] = useState<string>();
   const [userAddresses, setUserAddresses] = useState<string[]>();
-  const [currentChainId, setCurrentChainId] = useState<string | null>(null);
+  const [currentChainId, setCurrentChainId] = useState<ChainIds | null>(null); // Update type here
   const [error, setError] = useState<string | null>(null);
   
   // SIWE state
@@ -119,7 +119,7 @@ export default function RoninWalletDebugger() {
   };
 
   // Switch chain
-  const switchChain = async (chainId: string) => {
+  const switchChain = async (chainId: ChainIds) => {
     try {
       addLog("info", `Switching chain to ${chainId}`);
       await connector?.switchChain(chainId);
@@ -175,14 +175,18 @@ export default function RoninWalletDebugger() {
       addLog("info", "Message to sign", messageToSign);
 
       addLog("info", "Requesting signature");
-      const provider = await connector.getProvider();
-      const sig = await provider.request({
-        method: "personal_sign",
-        params: [messageToSign, currentAccount],
-      });
+      if (connector.getProvider) {
+        const provider = await connector.getProvider();
+        const sig = await provider.request({
+          method: "personal_sign",
+          params: [messageToSign, currentAccount],
+        });
 
-      setSignature(sig);
-      addLog("success", "Signature received", sig);
+        setSignature(sig);
+        addLog("success", "Signature received", sig);
+      } else {
+        addLog("error", "Connector does not have getProvider method");
+      }
     } catch (error) {
       addLog("error", "Error during sign-in", error);
     }
@@ -198,7 +202,7 @@ export default function RoninWalletDebugger() {
   };
 
   // Format chain name for display
-  const formatConnectedChain = (chainId: string | null) => {
+  const formatConnectedChain = (chainId: ChainIds | null) => {
     if (!chainId) return "Unknown Chain";
     
     switch (chainId) {
@@ -340,4 +344,4 @@ export default function RoninWalletDebugger() {
       </div>
     </div>
   );
-} 
+}
