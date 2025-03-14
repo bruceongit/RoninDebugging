@@ -24,7 +24,7 @@ A comprehensive debugging application for Ronin Wallet integration. This tool he
 1. Clone this repository
 2. Install dependencies:
    ```bash
-   cd walletdebug/app/my-app
+   cd RoninDebugging
    npm install
    ```
 3. Run the development server:
