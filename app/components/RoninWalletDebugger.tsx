@@ -21,7 +21,7 @@ export default function RoninWalletDebugger() {
   const [connector, setConnector] = useState<any>(null);
   const [connectedAddress, setConnectedAddress] = useState<string>();
   const [userAddresses, setUserAddresses] = useState<string[]>();
-  const [currentChainId, setCurrentChainId] = useState<ChainIds | null>(null); // Update type here
+  const [currentChainId, setCurrentChainId] = useState<ChainIds | null>(null);
   const [error, setError] = useState<string | null>(null);
   
   // SIWE state
